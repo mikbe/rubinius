@@ -481,6 +481,11 @@ module Rubinius
         if ARGV.empty?
           @advance = false
           @stream = STDIN
+          if $-i
+            $stdout.close
+            $stdout = @original_stdout
+            File.delete(@original_file) if @original_file
+          end
           @filename = "-"
           @use_stdin_only = true
           return true
@@ -494,6 +499,20 @@ module Rubinius
       @advance = false
 
       file = ARGV.shift
+      if $-i
+        if $-i == true # yes, I mean specifically true
+          require 'tempfile'
+          new_file_name = Tempfile.new(file).path
+          @original_file = new_file_name
+        else
+          new_file_name = file + $-i
+        end
+          
+        File.rename file, new_file_name
+        $stdout, @original_stdout = File.open(file, "w"), $stdout
+        file = new_file_name
+      end
+
       @stream = (file == "-" ? STDIN : File.open(file, "r"))
       @filename = file
 

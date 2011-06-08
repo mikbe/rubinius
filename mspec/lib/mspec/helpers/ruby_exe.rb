@@ -119,6 +119,11 @@ class Object
         body = "-e #{code}"
       end
       cmd = [RUBY_EXE, ENV['RUBY_FLAGS'], opts[:options], body, opts[:args]]
+      puts
+      puts
+      puts cmd.inspect
+      puts
+      puts
       `#{cmd.compact.join(' ')}`
     end
   end

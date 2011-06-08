@@ -1,0 +1,8 @@
+begin while line = ARGF.send(:gets) do puts 'x' end rescue EOFError; end
+
+# begin
+#   while line = ARGF.gets do
+#     puts "x" 
+#   end 
+# rescue EOFError
+# end
